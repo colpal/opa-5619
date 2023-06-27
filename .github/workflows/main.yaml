@@ -2,6 +2,7 @@ on: push
 jobs:
   main:
     strategy:
+      fail-fast: false
       matrix:
         wrapper: [true, false]
         runner: [self-hosted, ubuntu-latest]
