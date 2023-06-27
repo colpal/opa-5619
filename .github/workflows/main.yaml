@@ -12,6 +12,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v2 
         with:
           terraform_wrapper: ${{ matrix.wrapper }}
+      - run: terraform init
       - run: terraform plan -out=tfplan
       - run: terraform show -json tfplan > tfplan.json
       - uses: open-policy-agent/setup-opa@v2
