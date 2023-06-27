@@ -1,0 +1,17 @@
+on: push
+jobs:
+  main:
+    strategy:
+      matrix:
+        wrapper: [true, false]
+        runner: [self-hosted, ubuntu-latest]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v2 
+        with:
+          terraform_wrapper: ${{ matrix.wrapper }}
+      - run: terraform plan -out=tfplan
+      - run: terraform show -json tfplan > tfplan.json
+      - uses: open-policy-agent/setup-opa@v2
+      - run: cat tfplan.json | opa eval -Ifpretty input
